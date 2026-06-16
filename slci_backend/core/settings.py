@@ -5,18 +5,17 @@ Updated for Spirit Life Church International API Stack.
 """
 import os
 from pathlib import Path
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # ─── Base Directory ───────────────────────────────────────────────────────────
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # ─── Security ─────────────────────────────────────────────────────────────────
-# SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-s7&&wqgzjd&-v)c)bq8710yr1myt68_fbf9($hv%q8_zbel5z#'
-
-# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 # ─── Installed Apps ───────────────────────────────────────────────────────────
 INSTALLED_APPS = [
@@ -26,19 +25,16 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
-    # Third Party Apps for API Capabilities
     'rest_framework',
     'corsheaders',
-
-    # Internal Feature Modules
     'ministry',
 ]
 
 # ─── Middleware ───────────────────────────────────────────────────────────────
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware',  # Must be first
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -70,8 +66,15 @@ TEMPLATES = [
 # ─── Database ─────────────────────────────────────────────────────────────────
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': os.environ.get('DB_NAME', 'church_db'),
+        'USER': os.environ.get('DB_USER', 'church_user'),
+        'PASSWORD': os.environ.get('DB_PASSWORD', '123456#$'),
+        'HOST': os.environ.get('DB_HOST', 'localhost'),
+        'PORT': os.environ.get('DB_PORT', '3306'),
+        'OPTIONS': {
+            'charset': 'utf8mb4',
+        },
     }
 }
 
@@ -85,13 +88,15 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # ─── Internationalisation ─────────────────────────────────────────────────────
 LANGUAGE_CODE = 'en-us'
-TIME_ZONE = 'Africa/Harare'  # Central Africa Time — Zimbabwe
+TIME_ZONE = 'Africa/Harare'
 USE_I18N = True
 USE_TZ = True
 
 # ─── Static & Media Files ─────────────────────────────────────────────────────
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
@@ -99,7 +104,6 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # ─── CORS ─────────────────────────────────────────────────────────────────────
-# Allows the React / Vite dev server to call the Django API
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
     "http://127.0.0.1:5173",
@@ -110,16 +114,13 @@ CORS_ALLOWED_ORIGINS = [
 REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': [
         'rest_framework.renderers.JSONRenderer',
-        'rest_framework.renderers.BrowsableAPIRenderer',  # gives you the nice HTML view in browser
+        'rest_framework.renderers.BrowsableAPIRenderer',
     ],
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.AllowAny',  # public API — no auth required
+        'rest_framework.permissions.AllowAny',
     ],
 }
 
 # ─── YouTube Data API v3 ──────────────────────────────────────────────────────
-# Step 1: Go to https://console.cloud.google.com
-# Step 2: Create a project → Enable "YouTube Data API v3"
-# Step 3: Credentials → Create API Key → paste it below
-YOUTUBE_API_KEY    = 'YOUR_API_KEY_HERE'   # ← replace with your real key e.g. 'AIzaSy...'
-YOUTUBE_CHANNEL_ID = 'UCDQnjKioeHI6venlMA1LqHw'  # Spirit Life Church International
+YOUTUBE_API_KEY    = 'YOUR_API_KEY_HERE'
+YOUTUBE_CHANNEL_ID = 'UCDQnjKioeHI6venlMA1LqHw'

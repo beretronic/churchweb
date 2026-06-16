@@ -3,8 +3,8 @@ import { useState, useEffect } from "react";
 // ─── Constants ────────────────────────────────────────────────────────────────
 const SOCIALS = [
     { label: "X (Twitter)", icon: "fa-brands fa-x-twitter", href: "https://x.com/apostleolsenmhako" },
-    { label: "Facebook", icon: "fa-brands fa-facebook-f", href: "https://www.facebook.com/apostleolsenmhako" },
-    { label: "WhatsApp", icon: "fa-brands fa-whatsapp", href: "https://wa.me/2637XXXXXXXX" },
+    { label: "Facebook", icon: "fa-brands fa-facebook-f", href: "https://www.facebook.com/pastormhako" },
+    { label: "WhatsApp", icon: "fa-brands fa-whatsapp", href: "https://wa.me/263772622898" },
     { label: "TikTok", icon: "fa-brands fa-tiktok", href: "https://www.tiktok.com/@apostleolsenmhako" },
     { label: "YouTube", icon: "fa-brands fa-youtube", href: "https://www.youtube.com/@apostleolsenmhako" },
 ];
